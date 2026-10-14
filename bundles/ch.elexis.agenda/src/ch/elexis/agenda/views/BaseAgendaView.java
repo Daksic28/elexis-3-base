@@ -117,6 +117,7 @@ public abstract class BaseAgendaView extends ViewPart implements IRefreshable, I
 
 	private Timer timer;
 	public static final String DATE_CHANGED = "ch/elexis/agenda/DATE_CHANGED"; //$NON-NLS-1$
+	public static final String SHOW_APPOINTMENT = "ch/elexis/agenda/SHOW_APPOINTMENT"; //$NON-NLS-1$
 	private IAppointmentService appointmentService;
 
 	@Optional
@@ -127,6 +128,15 @@ public abstract class BaseAgendaView extends ViewPart implements IRefreshable, I
 				tv.refresh(true);
 			}, tv);
 		}
+	}
+
+	@Optional
+	@Inject
+	void showAppointment(@UIEventTopic(SHOW_APPOINTMENT) IAppointment appointment) {
+		setBereich(appointment.getSchedule());
+		agenda.setActDate(new TimeTool(appointment.getStartTime().toLocalDate()));
+		bereichSelectionEvent(appointment.getSchedule());
+		ContextServiceHolder.get().postEvent(DATE_CHANGED, appointment.getStartTime().toLocalDate());
 	}
 
 	@Optional

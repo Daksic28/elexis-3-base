@@ -58,6 +58,17 @@ public class AgendaView {
 		}
 	}
 
+	@Inject
+	@Optional
+	public void showAppointment(@UIEventTopic("ch/elexis/agenda/SHOW_APPOINTMENT") IAppointment appointment) { //$NON-NLS-1$
+		if (parallelComposite != null && !parallelComposite.isDisposed()) {
+			parallelComposite.setSelectedDate(appointment.getStartTime().toLocalDate());
+		}
+		if (weekComposite != null && !weekComposite.isDisposed()) {
+			weekComposite.setSelectedDate(appointment.getStartTime().toLocalDate());
+		}
+	}
+
 	@PostConstruct
 	public void createPartControl(MPart part, ESelectionService selectionService, EMenuService menuService,
 			Composite parent, UISynchronize uiSynchronize) {
